@@ -6,23 +6,29 @@
 /**************************************************************************************/
 // Spare pins: A4 & A5 can be used for I2C device later. 
 // Spare pins: A6, A7 input only, no internal pull up/down
+// Pin 11 MOSI, 12 MISO, 13 SCK used for NRF24L01 module SPI
 
-// A0 BLUE_LED 
-// A1 RED_LED
-// A2 Buzzer
-// A3 BAT_V
-// 2  PPM output
-// 4  BIND_JUMPER
-// 3  PWM
-// 5  PWM
-// 6  PWM
-// 9  PWM
-// 10 PWM
-// 7  NRF_CE
-// 8  NRF_CSN
-// 11 MOSI 
-// 12 MISO
-// 13 SCK
+//#define BLUE_LED_PIN      A0
+//#define RED_LED_PIN       A1
+//#ifdef BUZZER
+//#define BUZZER_PIN        A2
+//#endif
+//#ifdef BAT_V
+//#define BAT_V_PIN         A3
+//#endif
+//#ifdef CPPM
+//#define CPPM_PIN          2
+//#endif
+//#ifdef PWM
+//#define PWM_AUX1_PIN      3
+//#define PWM_THROTTLE_PIN  5
+//#define PWM_YAW_PIN       6
+//#define PWM_PITCH_PIN     9
+//#define PWM_ROLL_PIN      10
+//#endif
+//#define BIND_PIN          4
+//#define NRF_CE_PIN        7
+//#define NRF_CSN_PIN       8
 
 //TODO: standardise PINs as above after testing
 #define BLUE_LED_PIN      3

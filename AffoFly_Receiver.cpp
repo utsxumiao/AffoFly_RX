@@ -3,6 +3,8 @@
 #include "config.h"
 #include "def.h"
 #include "LED.h"
+#include "Buzzer.h"
+#include "Battery.h"
 #include "Output.h"
 #include "EEPROM.h"
 #include <SPI.h>
