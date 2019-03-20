@@ -40,7 +40,7 @@ ISR(TIMER1_COMPA_vect) {
   TCNT1 = 0;
   if ( state ) {
     //end pulse
-    PORTD = PORTD & ~B00000100; // turn pin 6 off.
+    PORTD = PORTD & ~B00000100; // turn pin 2 off.
     OCR1A = PPM_PULSE_LENGTH * CLOCK_MULTIPLIER;
     state = false;
   } else {
@@ -48,7 +48,7 @@ ISR(TIMER1_COMPA_vect) {
     static byte cur_chan_numb;
     static unsigned int calc_rest;
 
-    PORTD = PORTD | B00000100; // turn pin 6 on.
+    PORTD = PORTD | B00000100; // turn pin 2 on.
     state = true;
 
     if (cur_chan_numb >= CHANNEL_COUNT) {

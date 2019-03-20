@@ -22,11 +22,6 @@ struct TxBindData {
   uint32_t Token;
 };
 
-struct RxBindData {
-  char RxIdentifier[10];
-  uint32_t Token;
-};
-
 typedef enum {
   signalHigh,
   signalMedium,
