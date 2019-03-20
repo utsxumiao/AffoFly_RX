@@ -22,12 +22,20 @@ struct TxBindData {
   uint32_t Token;
 };
 
+struct LedStateStep {
+  bool BlueLedState;
+  bool RedLedState;
+  uint32_t Duration;
+};
+
 typedef enum {
   signalHigh,
   signalMedium,
   signalLow,
   signalNone,
-  radioBinding
+  radioSearching,
+  radioBound,
+  radioBindingRequired
 } LEDFlashPattern;
 
 #endif /* TYPES_H_ */

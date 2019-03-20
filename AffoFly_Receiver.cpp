@@ -11,8 +11,18 @@
 #include "printf.h"
 #include "AffoFly_Receiver.h"
 
+static const uint32_t radioReceiveInterval = 2000; //500hz
+uint32_t previousRadioReceiveTime = 0;
+static const uint32_t checkSignalInterval = 100000; //10hz
+uint32_t previousCheckSignalTime = 0;
 uint32_t previousSignalTime = 0;
 static const uint32_t signalTimeout = 500000; // 0.5s
+uint16_t packageCount = 0;
+#ifdef DEBUG
+uint16_t loopCount = 0;
+#endif
+static const uint32_t checkPackageCountInterval = 1000000; //1hz
+uint32_t previousCheckPackageCountTime = 0;
 
 uint32_t token = 0;
 uint8_t channel = 0;
@@ -29,7 +39,7 @@ void setup() {
 #ifdef DEBUG
   EEPROM_dumpAll();
 #endif
-
+  LED_init();
   pinMode(BIND_PIN, INPUT_PULLUP);
   if (digitalRead(BIND_PIN) == LOW) {
 #ifdef DEBUG
@@ -40,7 +50,10 @@ void setup() {
     token = EEPROM_readToken();
     channel = EEPROM_readChannel();
     if (token == 0 || channel == 0) {
-      // LED indicates binding is required
+      // Turn both LED on
+      LEDFlashPattern pattern = radioBindingRequired;
+      LED_start(pattern);
+      LED_flash(micros());
 #ifdef DEBUG
       Serial.println("Binding required");
 #endif
@@ -59,8 +72,13 @@ void setup() {
 void loop() {
   uint32_t currentTime = micros();
   receiveData(currentTime);
+  checkPackageCount(currentTime);
   checkSignal(currentTime);
+  LED_flash(currentTime);
   Output_data(controlData);
+#ifdef DEBUG
+  loopCount++;
+#endif
 }
 
 void radioInit() {
@@ -79,20 +97,30 @@ void radioInit() {
 }
 
 void receiveData(uint32_t currentTime) {
-  while (radio.available()) {
-    radio.read(&controlData, sizeof(ControlData));
-    if (controlData.Token == token) {
-      previousSignalTime = currentTime;
-#ifdef DEBUG
-      Serial.print("AUX1: "); Serial.println(controlData.Aux1);
-#endif
+  if (currentTime - previousRadioReceiveTime >= radioReceiveInterval) {
+    previousRadioReceiveTime = currentTime;
+    while (radio.available()) {
+      radio.read(&controlData, sizeof(ControlData));
+      if (controlData.Token == token) {
+        previousSignalTime = currentTime;
+        packageCount++;
+//#ifdef DEBUG
+//        Serial.print("AUX1: "); Serial.println(controlData.Aux1);
+//#endif
+      }
     }
   }
 }
 
 void checkSignal(uint32_t currentTime) {
-  if (currentTime - previousSignalTime > signalTimeout) {
-    resetData();
+  if (currentTime - previousCheckSignalTime >= checkSignalInterval) {
+    previousCheckSignalTime = currentTime;
+    if (currentTime - previousSignalTime > signalTimeout) {
+      resetData();
+#ifdef DEBUG
+  Serial.println("Lost signal, control data has been reset.");
+#endif
+    }
   }
 }
 
@@ -101,6 +129,29 @@ void resetData() {
   controlData.Yaw = 1500;
   controlData.Pitch = 1500;
   controlData.Roll = 1500;
+}
+
+void checkPackageCount(uint32_t currentTime) {
+  if (currentTime - previousCheckPackageCountTime >= checkPackageCountInterval) {
+    previousCheckPackageCountTime = currentTime;
+#ifdef DEBUG
+    Serial.print("Package count: ");  Serial.print(packageCount); Serial.print("  ");
+    Serial.print("Loop count: "); Serial.println(loopCount);
+    loopCount = 0;
+#endif
+    LEDFlashPattern pattern;
+    if (packageCount >= SIGNAL_HIGH_PACKAGE_COUNT) {
+      pattern = signalHigh;
+    } else if (packageCount >= SIGNAL_MEDIUM_PACKAGE_COUNT) {
+      pattern = signalMedium;
+    } else if (packageCount > 0) {
+      pattern = signalLow;
+    } else {
+      pattern = signalNone;
+    }
+    LED_start(pattern);
+    packageCount = 0;
+  }
 }
 
 void radioBind() {
@@ -140,20 +191,14 @@ void radioBind() {
         Serial.print(".");
 #endif
       }
+      LEDFlashPattern pattern = radioSearching;
+      LED_start(pattern);
 #ifdef DEBUG
       Serial.println();
 #endif
-      pinMode(RED_LED_PIN, OUTPUT);
-      digitalWrite(RED_LED_PIN, HIGH);
-      delay(100);
-      digitalWrite(RED_LED_PIN, LOW);
-      delay(100);
     } else {
-      pinMode(BLUE_LED_PIN, OUTPUT);
-      digitalWrite(BLUE_LED_PIN, HIGH);
-      delay(100);
-      digitalWrite(BLUE_LED_PIN, LOW);
-      delay(100);
+      LEDFlashPattern pattern = radioBound;
+      LED_start(pattern);
 #ifdef DEBUG
       Serial.print("Bound on channel: "); Serial.println(channel);
 #endif

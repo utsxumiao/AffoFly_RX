@@ -6,6 +6,7 @@ extern uint8_t channel;
 
 void radioInit();
 void receiveData(uint32_t currentTime);
+void checkPackageCount(uint32_t currentTime);
 void checkSignal(uint32_t currentTime);
 void resetData();
 void radioBind();
