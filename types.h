@@ -35,7 +35,8 @@ typedef enum {
   signalNone,
   radioSearching,
   radioBound,
-  radioBindingRequired
+  radioBindingRequired,
+  systemStarted
 } LEDFlashPattern;
 
 #endif /* TYPES_H_ */

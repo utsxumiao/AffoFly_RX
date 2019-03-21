@@ -28,16 +28,19 @@ void LED_start(LEDFlashPattern pattern) {
       setLEDValues(1,0,500000, 0,0,500000, 0,0,0, 0,0,0, 0,0,0, 0,0,0, 1);
       break;
     case signalNone:
-      setLEDValues(0,1,1000000, 0,0,0, 0,0,0, 0,0,0, 0,0,0, 0,0,0, 1);
+      setLEDValues(1,0,50000, 0,0,1000000, 0,0,0, 0,0,0, 0,0,0, 0,0,0, 1);
       break;
     case radioSearching:
-      setLEDValues(0,1,100000, 0,0,100000, 0,0,0, 0,0,0, 0,0,0, 0,0,0, 5);
+      setLEDValues(0,1,50000, 0,0,50000, 0,0,0, 0,0,0, 0,0,0, 0,0,0, 5);
       break;
     case radioBound:
       setLEDValues(1,1,200000, 0,0,200000, 0,0,0, 0,0,0, 0,0,0, 0,0,0, 3);
       break;
     case radioBindingRequired:
-      setLEDValues(1,0,1000000, 1,0,1000000, 0,0,0, 0,0,0, 0,0,0, 0,0,0, 1);
+      setLEDValues(0,0,0, 0,0,0, 0,0,0, 0,0,0, 0,0,0, 0,0,0, 1);
+      break;
+    case systemStarted:
+      setLEDValues(1,1,1000000, 0,0,0, 0,0,0, 0,0,0, 0,0,0, 0,0,0, 1);
       break;
   }
 }

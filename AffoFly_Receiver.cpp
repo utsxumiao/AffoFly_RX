@@ -42,6 +42,10 @@ void setup() {
   EEPROM_dumpAll();
 #endif
   LED_init();
+  // Turn both LEDs on until next pattern kicks in
+  LEDFlashPattern pattern = systemStarted;
+  LED_start(pattern);
+  LED_flash(micros());
   pinMode(BIND_PIN, INPUT_PULLUP);
   if (digitalRead(BIND_PIN) == LOW) {
 #ifdef DEBUG
@@ -52,7 +56,6 @@ void setup() {
     token = EEPROM_readToken();
     channel = EEPROM_readChannel();
     if (token == 0 || channel == 0) {
-      // Turn both LED on
       LEDFlashPattern pattern = radioBindingRequired;
       LED_start(pattern);
       LED_flash(micros());
@@ -106,9 +109,9 @@ void receiveData(uint32_t currentTime) {
       if (controlData.Token == token) {
         previousSignalTime = currentTime;
         packageCount++;
-//#ifdef DEBUG
-//        Serial.print("AUX1: "); Serial.println(controlData.Aux1);
-//#endif
+        //#ifdef DEBUG
+        //        Serial.print("AUX1: "); Serial.println(controlData.Aux1);
+        //#endif
       }
     }
   }
@@ -120,7 +123,7 @@ void checkSignal(uint32_t currentTime) {
     if (currentTime - previousSignalTime > signalTimeout) {
       resetData();
 #ifdef DEBUG
-  Serial.println("Lost signal, control data has been reset.");
+      Serial.println("Lost signal, control data has been reset.");
 #endif
     }
   }

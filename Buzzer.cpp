@@ -12,20 +12,11 @@ uint32_t beepingTime = 0;
 
 void Buzzer_start(BuzzerBeepPattern pattern) {
   switch (pattern) {
-    case buttonPress:
-      setBuzzerValues(50000, 0, 0, 0, 0, 0, 1);
-      break;
     case lowVoltage:
       setBuzzerValues(1000000, 1000000, 0, 0, 0, 0, 3);
       break;
-    case throttleWarning:
-      setBuzzerValues(100000, 100000, 0, 0, 0, 0, 100);
-      break;
     case radioBinding:
       setBuzzerValues(50000, 50000, 50000, 50000, 50000, 50000, 65000);
-      break;
-    default:
-      setBuzzerValues(0, 0, 0, 0, 0, 0, 0);
       break;
   }
 }
@@ -56,10 +47,6 @@ void Buzzer_beep(uint32_t currentTime) {
         digitalWrite(BUZZER_PIN, LOW);
         buzzerBeepPatternIndex = 0;
         buzzerBeepRepeats--;
-#ifdef DEBUG
-        Serial.print(F("Found item with value 0, quite current repeat. Repeats: "));
-        Serial.println(buzzerBeepRepeats);
-#endif
       } else {
         digitalWrite(BUZZER_PIN, buzzerBeepPatternIndex % 2 == 0 ? HIGH : LOW);
         beepingTime += buzzerBeepPattern[buzzerBeepPatternIndex];
@@ -67,15 +54,10 @@ void Buzzer_beep(uint32_t currentTime) {
         if (buzzerBeepPatternIndex > 5) {
           buzzerBeepPatternIndex = 0;
           buzzerBeepRepeats--;
-//#ifdef DEBUG
-//        Serial.print("Repeats: ");
-//        Serial.println(buzzerBeepRepeats);
-//#endif
         }
       }
     }
   }
 }
-
 
 #endif
