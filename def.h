@@ -8,32 +8,25 @@
 // Spare pins: A6, A7 input only, no internal pull up/down
 // Pin 11 MOSI, 12 MISO, 13 SCK used for NRF24L01 module SPI
 
-//#define BLUE_LED_PIN      A0
-//#define RED_LED_PIN       A1
-//#ifdef BUZZER
-//#define BUZZER_PIN        A2
-//#endif
-//#ifdef BAT_V
-//#define BAT_V_PIN         A3
-//#endif
-//#ifdef CPPM
-//#define CPPM_PIN          2
-//#endif
-//#ifdef PWM
-//#define PWM_AUX1_PIN      3
-//#define PWM_THROTTLE_PIN  5
-//#define PWM_YAW_PIN       6
-//#define PWM_PITCH_PIN     9
-//#define PWM_ROLL_PIN      10
-//#endif
-//#define BIND_PIN          4
-//#define NRF_CE_PIN        7
-//#define NRF_CSN_PIN       8
-
-//TODO: standardise PINs as above after testing
-#define BLUE_LED_PIN      3
-#define RED_LED_PIN       4
-#define BIND_PIN          5
+#define RED_LED_PIN       A2
+#define BLUE_LED_PIN      A3
+#ifdef BUZZER
+#define BUZZER_PIN        A0
+#endif
+#ifdef BAT_V
+#define BAT_V_PIN         A1
+#endif
+#ifdef CPPM
+#define CPPM_PIN          2
+#endif
+#ifdef PWM
+#define PWM_THROTTLE_PIN  3
+#define PWM_YAW_PIN       5
+#define PWM_PITCH_PIN     6
+#define PWM_ROLL_PIN      9
+#define PWM_AUX1_PIN      10
+#endif
+#define BIND_PIN          4
 #define NRF_CE_PIN        7
 #define NRF_CSN_PIN       8
 
