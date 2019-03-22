@@ -4,6 +4,6 @@
 //#define PWM
 #define CPPM
 //#define BUZZER
-//#define BAT_V
+//#define V_BAT
 
 #endif /* CONFIG_H_ */

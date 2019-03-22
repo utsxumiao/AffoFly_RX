@@ -13,8 +13,8 @@
 #ifdef BUZZER
 #define BUZZER_PIN        A0
 #endif
-#ifdef BAT_V
-#define BAT_V_PIN         A1
+#ifdef V_BAT
+#define V_BAT_PIN         A1
 #endif
 #ifdef CPPM
 #define CPPM_PIN          2

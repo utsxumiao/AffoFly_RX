@@ -6,6 +6,7 @@
 extern uint16_t BATTERY_VOLTAGE;
 extern bool LOW_VOLTAGE;
 
+void Battery_init();
 void Battery_read(uint32_t currentTime);
 void setLowVoltageAlarm(uint16_t voltage);
 uint16_t readVoltage();
