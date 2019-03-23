@@ -20,11 +20,12 @@
 #define CPPM_PIN          2
 #endif
 #ifdef PWM
-#define PWM_THROTTLE_PIN  3
-#define PWM_YAW_PIN       5
-#define PWM_PITCH_PIN     6
-#define PWM_ROLL_PIN      9
-#define PWM_AUX1_PIN      10
+#define PWM_THROTTLE_PIN  2
+#define PWM_YAW_PIN       3
+#define PWM_PITCH_PIN     5
+#define PWM_ROLL_PIN      6
+#define PWM_AUX1_PIN      9
+#define PWM_AUX2_PIN      10
 #endif
 #define BIND_PIN          4
 #define NRF_CE_PIN        7
