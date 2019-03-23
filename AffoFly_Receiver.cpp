@@ -69,6 +69,9 @@ void setup() {
       radioInit();
       resetData();
       Output_init();
+#ifdef V_BAT
+      Battery_init();
+#endif
     }
   }
   delay(100);
@@ -81,6 +84,9 @@ void loop() {
   checkSignal(currentTime);
   LED_flash(currentTime);
   Output_data(controlData);
+#ifdef V_BAT
+  Battery_read(currentTime);
+#endif
 #ifdef DEBUG
   loopCount++;
 #endif
@@ -109,9 +115,21 @@ void receiveData(uint32_t currentTime) {
       if (controlData.Token == token) {
         previousSignalTime = currentTime;
         packageCount++;
-        //#ifdef DEBUG
-        //        Serial.print("AUX1: "); Serial.println(controlData.Aux1);
-        //#endif
+#ifdef DEBUG
+        Serial.print("THR: "); Serial.print(controlData.Throttle);  Serial.print("  ");
+        Serial.print("YAW: "); Serial.print(controlData.Yaw);  Serial.print("  ");
+        Serial.print("PIT: "); Serial.print(controlData.Pitch);  Serial.print("  ");
+        Serial.print("ROL: "); Serial.print(controlData.Roll);  Serial.print("  ");
+        Serial.print("AUX1: "); Serial.print(controlData.Aux1);  Serial.print("  ");
+        Serial.print("AUX2: "); Serial.print(controlData.Aux2);  Serial.print("  ");
+        Serial.print("AUX3: "); Serial.print(controlData.Aux3);  Serial.print("  ");
+        Serial.print("AUX4: "); Serial.print(controlData.Aux4);  Serial.print("  ");
+        Serial.print("AUX5: "); Serial.print(controlData.Aux5);  Serial.print("  ");
+        Serial.print("AUX6: "); Serial.print(controlData.Aux6);  Serial.print("  ");
+        Serial.print("SWD1: "); Serial.print(controlData.Swd1);  Serial.print("  ");
+        Serial.print("SWD2: "); Serial.print(controlData.Swd2);  Serial.print("  ");
+        Serial.println();
+#endif
       }
     }
   }
