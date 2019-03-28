@@ -130,6 +130,7 @@ void receiveData(uint32_t currentTime) {
         Serial.print("SWD2: "); Serial.print(controlData.Swd2);  Serial.print("  ");
         Serial.println();
 #endif
+        break;
       }
     }
   }
