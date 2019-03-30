@@ -5,6 +5,7 @@
 #include "LED.h"
 #include "Buzzer.h"
 #include "Battery.h"
+#include "Sonar.h"
 #include "Output.h"
 #include "EEPROM.h"
 #include <SPI.h>
@@ -86,6 +87,9 @@ void loop() {
   Output_data(controlData);
 #ifdef V_BAT
   Battery_read(currentTime);
+#endif
+#ifdef SONAR
+  Sonar_read(currentTime);
 #endif
 #ifdef DEBUG
   loopCount++;

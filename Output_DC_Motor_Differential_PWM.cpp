@@ -2,21 +2,10 @@
 #include "types.h"
 #include "config.h"
 #include "def.h"
+#include "Sonar.h"
 #include "Output.h"
 
 #ifdef DC_MOTOR_DIFFERENTIAL_PWM
-
-#define PWM_LEFT_PIN_1    5
-#define PWM_LEFT_PIN_2    6
-#define PWM_RIGHT_PIN_1   9
-#define PWM_RIGHT_PIN_2   10
-
-#define RC_MIN            1000
-#define RC_MAX            2000
-#define DDRIVE_MIN        -100
-#define DDRIVE_MAX        100
-#define MOTOR_MIN_PWM     -255
-#define MOTOR_MAX_PWM     255
 
 int16_t LeftMotorOutput;
 int16_t RightMotorOutput;
@@ -38,6 +27,12 @@ void Output_data(ControlData controlData) {
 
   float x = map(controlData.Roll, RC_MIN, RC_MAX, DDRIVE_MIN, DDRIVE_MAX);
   float y = map(controlData.Pitch, RC_MIN, RC_MAX, DDRIVE_MIN, DDRIVE_MAX);
+
+#ifdef SONAR
+  if(SONAR_DISTANCE_CM <= SONAR_ALARM_DISTANCE && y > 0) {
+    y = 0;
+  }
+#endif
 
   float z = sqrt(x * x + y * y);
   float rad = acos(abs(x) / z);

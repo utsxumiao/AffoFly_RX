@@ -15,4 +15,9 @@
 #define V_BAT_ALARM_VOLTAGE   3.6
 #endif
 
+#define SONAR
+#ifdef SONAR
+#define SONAR_ALARM_DISTANCE  10
+#endif
+
 #endif /* CONFIG_H_ */
