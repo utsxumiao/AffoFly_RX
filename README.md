@@ -35,6 +35,7 @@ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLI
 ### Acknowlegements
 - [parkchan2017](https://github.com/parkchan2017). Developed Menu System for AffoFly_TX, improved and taught me programming in C/C++. (I am a hopeless .NET developer)
 - [iforce2d](https://www.youtube.com/channel/UCTXOorupCLqqQifs2jbz7rQ). He has heaps of interesting, informative and yet good quality videos.
+- [Savage Makers](http://savagemakers.com/differential-drive-tank-drive-in-arduino/). I've referenced/copied code and methodology from Savage Makers in Dual Motor Differential PWM module.
 - [MultiWii Community](http://www.multiwii.com)
 - [Arduino](https://www.arduino.cc)
 
