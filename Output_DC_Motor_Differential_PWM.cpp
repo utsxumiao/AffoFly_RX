@@ -4,7 +4,7 @@
 #include "def.h"
 #include "Output.h"
 
-#ifdef CAR_2_MOTOR_PWM
+#ifdef DC_MOTOR_DIFFERENTIAL_PWM
 
 #define PWM_LEFT_PIN_1    5
 #define PWM_LEFT_PIN_2    6
