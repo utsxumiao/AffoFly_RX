@@ -61,6 +61,35 @@ void Output_data(ControlData controlData) {
   LeftMotorOutput = map(rawLeft, DDRIVE_MIN, DDRIVE_MAX, MOTOR_MIN_PWM, MOTOR_MAX_PWM);
   RightMotorOutput = map(rawRight, DDRIVE_MIN, DDRIVE_MAX, MOTOR_MIN_PWM, MOTOR_MAX_PWM);
 
+#ifdef DC_MOTOR_SPEED_AUX
+  float speedRatio;
+  switch (DC_MOTOR_SPEED_AUX) {
+    case 1:
+      speedRatio = controlData.Aux1 / RC_MAX;
+      break;
+    case 2:
+      speedRatio = controlData.Aux2 / RC_MAX;
+      break;
+    case 3:
+      speedRatio = controlData.Aux3 / RC_MAX;
+      break;
+    case 4:
+      speedRatio = controlData.Aux4 / RC_MAX;
+      break;
+    case 5:
+      speedRatio = controlData.Aux5 / RC_MAX;
+      break;
+    case 6:
+      speedRatio = controlData.Aux6 / RC_MAX;
+      break;
+    default:
+      speedRatio = 1;
+      break;
+  }
+  LeftMotorOutput *= speedRatio;
+  RightMotorOutput *= speedRatio;
+#endif
+
 #ifdef DEBUG
   Serial.print("x: ");     Serial.print(x);           Serial.print("  ");
   Serial.print("y: ");     Serial.print(y);           Serial.print("  ");

@@ -3,6 +3,9 @@
 
 //#define PWM
 #define DC_MOTOR_DIFFERENTIAL_PWM
+#ifdef DC_MOTOR_DIFFERENTIAL_PWM
+#define DC_MOTOR_SPEED_AUX    2
+#endif
 //#define CPPM
 
 //#define BUZZER
