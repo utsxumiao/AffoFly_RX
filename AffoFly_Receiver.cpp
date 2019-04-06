@@ -14,15 +14,15 @@
 #include "printf.h"
 #include "AffoFly_Receiver.h"
 
-static const uint32_t radioReceiveInterval = 2000; //500hz
+static const uint32_t radioReceiveInterval = 5000; //200hz
 uint32_t previousRadioReceiveTime = 0;
-static const uint32_t checkSignalInterval = 100000; //10hz
-uint32_t previousCheckSignalTime = 0;
+static const uint32_t generateOutputInterval = 10000; //100hz
+uint32_t previousGenerateOutputTime = 0;
 uint32_t previousSignalTime = 0;
 static const uint32_t signalTimeout = 500000; // 0.5s
 uint16_t packageCount = 0;
 #ifdef DEBUG
-uint16_t loopCount = 0;
+uint32_t loopCount = 0;
 #endif
 static const uint32_t checkPackageCountInterval = 1000000; //1hz
 uint32_t previousCheckPackageCountTime = 0;
@@ -82,9 +82,8 @@ void loop() {
   uint32_t currentTime = micros();
   receiveData(currentTime);
   checkPackageCount(currentTime);
-  checkSignal(currentTime);
   LED_flash(currentTime);
-  Output_data(controlData);
+  generateOutput(currentTime);
 #ifdef V_BAT
   Battery_read(currentTime);
 #endif
@@ -112,43 +111,34 @@ void radioInit() {
 }
 
 void receiveData(uint32_t currentTime) {
-  if (currentTime - previousRadioReceiveTime >= radioReceiveInterval) {
-    previousRadioReceiveTime = currentTime;
-    while (radio.available()) {
-      radio.read(&controlData, sizeof(ControlData));
-      if (controlData.Token == token) {
-        previousSignalTime = currentTime;
-        packageCount++;
+  if (radio.available()) {
+    radio.read(&controlData, sizeof(ControlData));
+    if (controlData.Token == token) {
+      previousSignalTime = currentTime;
+      packageCount++;
 #ifdef DEBUG
-        Serial.print("THR: "); Serial.print(controlData.Throttle);  Serial.print("  ");
-        Serial.print("YAW: "); Serial.print(controlData.Yaw);  Serial.print("  ");
-        Serial.print("PIT: "); Serial.print(controlData.Pitch);  Serial.print("  ");
-        Serial.print("ROL: "); Serial.print(controlData.Roll);  Serial.print("  ");
-        Serial.print("AUX1: "); Serial.print(controlData.Aux1);  Serial.print("  ");
-        Serial.print("AUX2: "); Serial.print(controlData.Aux2);  Serial.print("  ");
-        Serial.print("AUX3: "); Serial.print(controlData.Aux3);  Serial.print("  ");
-        Serial.print("AUX4: "); Serial.print(controlData.Aux4);  Serial.print("  ");
-        Serial.print("AUX5: "); Serial.print(controlData.Aux5);  Serial.print("  ");
-        Serial.print("AUX6: "); Serial.print(controlData.Aux6);  Serial.print("  ");
-        Serial.print("SWD1: "); Serial.print(controlData.Swd1);  Serial.print("  ");
-        Serial.print("SWD2: "); Serial.print(controlData.Swd2);  Serial.print("  ");
-        Serial.println();
+      Serial.print("THR: ");  Serial.print(controlData.Throttle);   Serial.print("  ");
+      Serial.print("YAW: ");  Serial.print(controlData.Yaw);        Serial.print("  ");
+      Serial.print("PIT: ");  Serial.print(controlData.Pitch);      Serial.print("  ");
+      Serial.print("ROL: ");  Serial.print(controlData.Roll);       Serial.print("  ");
+      Serial.print("AUX1: "); Serial.print(controlData.Aux1);       Serial.print("  ");
+      Serial.print("AUX2: "); Serial.print(controlData.Aux2);       Serial.print("  ");
+      Serial.print("AUX3: "); Serial.print(controlData.Aux3);       Serial.print("  ");
+      Serial.print("AUX4: "); Serial.print(controlData.Aux4);       Serial.print("  ");
+      Serial.print("AUX5: "); Serial.print(controlData.Aux5);       Serial.print("  ");
+      Serial.print("AUX6: "); Serial.print(controlData.Aux6);       Serial.print("  ");
+      Serial.print("SWD1: "); Serial.print(controlData.Swd1);       Serial.print("  ");
+      Serial.print("SWD2: "); Serial.print(controlData.Swd2);       Serial.print("  ");
+      Serial.println();
 #endif
-        break;
-      }
     }
   }
 }
 
-void checkSignal(uint32_t currentTime) {
-  if (currentTime - previousCheckSignalTime >= checkSignalInterval) {
-    previousCheckSignalTime = currentTime;
-    if (currentTime - previousSignalTime > signalTimeout) {
-      resetData();
-#ifdef DEBUG
-      Serial.println("Lost signal, control data has been reset.");
-#endif
-    }
+void generateOutput(uint32_t currentTime) {
+  if (currentTime - previousGenerateOutputTime >= generateOutputInterval) {
+    previousGenerateOutputTime = currentTime;
+    Output_data(controlData);
   }
 }
 
@@ -176,6 +166,10 @@ void checkPackageCount(uint32_t currentTime) {
       pattern = signalLow;
     } else {
       pattern = signalNone;
+      resetData();
+#ifdef DEBUG
+      Serial.println("Lost signal, control data has been reset.");
+#endif
     }
     LED_start(pattern);
     packageCount = 0;
