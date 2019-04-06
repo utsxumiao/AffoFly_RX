@@ -22,6 +22,34 @@ void Output_init() {
 }
 
 void Output_data(ControlData controlData) {
+#ifdef DC_MOTOR_ARM_AUX
+  uint16_t armAux = 0;
+  switch (DC_MOTOR_ARM_AUX) {
+    case 1:
+      armAux = controlData.Aux1;
+      break;
+    case 2:
+      armAux = controlData.Aux2;
+      break;
+    case 3:
+      armAux = controlData.Aux3;
+      break;
+    case 4:
+      armAux = controlData.Aux4;
+      break;
+    case 5:
+      armAux = controlData.Aux5;
+      break;
+    case 6:
+      armAux = controlData.Aux6;
+      break;
+    default:
+      armAux = 1000;
+      break;
+  }
+  if (armAux < 1200) return;
+#endif
+
   float rawLeft;
   float rawRight;
 
@@ -29,7 +57,7 @@ void Output_data(ControlData controlData) {
   float y = map(controlData.Pitch, RC_MIN, RC_MAX, DDRIVE_MIN, DDRIVE_MAX);
 
 #ifdef SONAR
-  if(SONAR_DISTANCE_CM <= SONAR_ALARM_DISTANCE && y > 0) {
+  if (SONAR_DISTANCE_CM <= SONAR_ALARM_DISTANCE && y > 0) {
     y = 0;
   }
 #endif
@@ -84,8 +112,8 @@ void Output_data(ControlData controlData) {
 #ifdef DEBUG
   Serial.print("speedRatio: "); Serial.print(speedRatio); Serial.print("  ");
 #endif
-  LeftMotorOutput *= speedRatio;
-  RightMotorOutput *= speedRatio;
+  LeftMotorOutput *= speedRatio * speedRatio;
+  RightMotorOutput *= speedRatio * speedRatio;
 #endif
 
 #ifdef DEBUG
@@ -97,7 +125,7 @@ void Output_data(ControlData controlData) {
   Serial.print("RightMotorOutput: "); Serial.print(RightMotorOutput);  Serial.print("  ");
   Serial.println();
 #endif
-  
+
   if (LeftMotorOutput >= 10) {
     digitalWrite(PWM_LEFT_PIN_1, 0);
     analogWrite(PWM_LEFT_PIN_2, LeftMotorOutput);
