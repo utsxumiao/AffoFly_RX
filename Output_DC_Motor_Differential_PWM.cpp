@@ -60,27 +60,30 @@ void Output_data(ControlData controlData) {
   float speedRatio;
   switch (DC_MOTOR_SPEED_AUX) {
     case 1:
-      speedRatio = controlData.Aux1 / RC_MAX;
+      speedRatio = (float)controlData.Aux1 / (float)RC_MAX;
       break;
     case 2:
-      speedRatio = controlData.Aux2 / RC_MAX;
+      speedRatio = (float)controlData.Aux2 / (float)RC_MAX;
       break;
     case 3:
-      speedRatio = controlData.Aux3 / RC_MAX;
+      speedRatio = (float)controlData.Aux3 / (float)RC_MAX;
       break;
     case 4:
-      speedRatio = controlData.Aux4 / RC_MAX;
+      speedRatio = (float)controlData.Aux4 / (float)RC_MAX;
       break;
     case 5:
-      speedRatio = controlData.Aux5 / RC_MAX;
+      speedRatio = (float)controlData.Aux5 / (float)RC_MAX;
       break;
     case 6:
-      speedRatio = controlData.Aux6 / RC_MAX;
+      speedRatio = (float)controlData.Aux6 / (float)RC_MAX;
       break;
     default:
       speedRatio = 1;
       break;
   }
+#ifdef DEBUG
+  Serial.print("speedRatio: "); Serial.print(speedRatio); Serial.print("  ");
+#endif
   LeftMotorOutput *= speedRatio;
   RightMotorOutput *= speedRatio;
 #endif
