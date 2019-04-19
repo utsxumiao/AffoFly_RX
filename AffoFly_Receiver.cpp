@@ -111,9 +111,16 @@ void radioInit() {
 }
 
 void receiveData(uint32_t currentTime) {
+  ControlData tempData;
   if (radio.available()) {
-    radio.read(&controlData, sizeof(ControlData));
-    if (controlData.Token == token) {
+    radio.read(&tempData, sizeof(ControlData));
+#ifdef DEBUG
+    Serial.print("ROM Token: ");  Serial.print(token);      Serial.print("  ");
+    Serial.print("RADIO Token: ");      Serial.print(tempData.Token);      Serial.print("  ");
+    Serial.println();
+#endif
+    if (tempData.Token == token) {
+      controlData = tempData;
       previousSignalTime = currentTime;
       packageCount++;
 #ifdef DEBUG
